@@ -4,7 +4,7 @@
 
 (define scribblings
   (list (list "main.scrbl"
-              (list 'multi-page)
+              (list)
               (list 'library)
               "atomichron")))
 

@@ -11,6 +11,7 @@
          #:microexpression-builder (-> natural? microexpression?))
         (#:name (or/c interned-symbol? #f))
         microbenchmark?)]
+  [microbenchmark-run! (-> microbenchmark? microbenchmark-result?)]
   [microbenchmark-result
    (-> #:average-cpu-nanoseconds nonnegative-rational?
        #:average-real-nanoseconds nonnegative-rational?
