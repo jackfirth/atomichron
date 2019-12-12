@@ -9,7 +9,7 @@
    (->* (#:iterations exact-positive-integer?
          #:microexpression-iterations exact-positive-integer?
          #:microexpression-builder (-> natural? microexpression?))
-        (#:name interned-symbol?)
+        (#:name (or/c interned-symbol? #f))
         microbenchmark?)]
   [microbenchmark-result
    (-> #:average-cpu-nanoseconds nonnegative-rational?
@@ -26,7 +26,7 @@
   [microexpression? predicate/c]
   [make-microexpression
    (->* (#:thunk (procedure-arity-includes/c 0))
-        (#:name interned-symbol?)
+        (#:name (or/c interned-symbol? #f))
         microexpression?)]))
 
 (require racket/math
