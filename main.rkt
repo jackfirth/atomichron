@@ -68,7 +68,8 @@
 
 (define (microbenchmark-run! benchmark)
   (define iterations (microbenchmark-iterations benchmark))
-  (define microexpression-iterations (microbenchmark-iterations benchmark))
+  (define microexpression-iterations
+    (microbenchmark-microexpression-iterations benchmark))
   (define builder (microbenchmark-microexpression-builder benchmark))
   (for/fold ([total-cpu-milliseconds 0]
              [total-real-milliseconds 0]
