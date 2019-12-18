@@ -13,11 +13,14 @@
         microbenchmark?)]
   [microbenchmark-run! (-> microbenchmark? microbenchmark-result?)]
   [microbenchmark-result
-   (-> #:average-cpu-nanoseconds nonnegative-rational?
+   (-> #:benchmark-name (or/c interned-symbol? #f)
+       #:average-cpu-nanoseconds nonnegative-rational?
        #:average-real-nanoseconds nonnegative-rational?
        #:average-gc-cpu-nanoseconds nonnegative-rational?
        microbenchmark-result?)]
   [microbenchmark-result? predicate/c]
+  [microbenchmark-result-benchmark-name
+   (-> microbenchmark-result? (or/c interned-symbol? #f))]
   [microbenchmark-result-average-cpu-nanoseconds
    (-> microbenchmark-result? nonnegative-rational?)]
   [microbenchmark-result-average-real-nanoseconds
@@ -46,13 +49,15 @@
   (iterations microexpression-iterations microexpression-builder))
 
 (define-record-type microbenchmark-result
-  (average-cpu-nanoseconds
+  (benchmark-name
+   average-cpu-nanoseconds
    average-real-nanoseconds
    average-gc-cpu-nanoseconds))
 
 (define num-nanoseconds-per-millisecond 1000000)
 
 (define (compute-microbenchmark-result
+         #:benchmark-name name
          #:total-cpu-milliseconds cpu-ms
          #:total-real-milliseconds real-ms
          #:total-gc-cpu-milliseconds gc-cpu-ms
@@ -62,11 +67,13 @@
     (* (/ total iterations microexpression-iterations)
        num-nanoseconds-per-millisecond))
   (microbenchmark-result
+   #:benchmark-name name
    #:average-cpu-nanoseconds (compute-average-nanos cpu-ms)
    #:average-real-nanoseconds (compute-average-nanos real-ms)
    #:average-gc-cpu-nanoseconds (compute-average-nanos gc-cpu-ms)))
 
 (define (microbenchmark-run! benchmark)
+  (define name (object-name benchmark))
   (define iterations (microbenchmark-iterations benchmark))
   (define microexpression-iterations
     (microbenchmark-microexpression-iterations benchmark))
@@ -76,6 +83,7 @@
              [total-gc-cpu-milliseconds 0]
              #:result
              (compute-microbenchmark-result
+              #:benchmark-name name
               #:total-cpu-milliseconds total-cpu-milliseconds
               #:total-real-milliseconds total-real-milliseconds
               #:total-gc-cpu-milliseconds total-gc-cpu-milliseconds

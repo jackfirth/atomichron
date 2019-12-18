@@ -55,6 +55,7 @@ cannot be reliably reproduced or measured by Atomichron.
    (define indices (build-vector num-iterations (λ (_) (random size))))
    (define vector-ref-benchmark
      (make-microbenchmark
+      #:name 'vector-ref-benchmark
       #:iterations num-iterations
       #:microexpression-iterations 1000
       #:microexpression-builder
@@ -72,6 +73,7 @@ cannot be reliably reproduced or measured by Atomichron.
  microbenchmark-run!].}
 
 @defproc[(microbenchmark-result
+          [#:benchmark-name name (or/c interned-symbol? #f)]
           [#:average-cpu-nanoseconds cpu-nanos
            (and/c rational? (not/c negative?))]
           [#:average-real-nanoseconds real-nanos
@@ -83,6 +85,10 @@ cannot be reliably reproduced or measured by Atomichron.
  users. Instead results are retrieved from @racket[microbenchmark-run!]. See
  @racket[time-apply] for an explanation of the differences between CPU time,
  real time, and GC CPU time.}
+
+@defproc[(microbenchmark-result-benchmark-name [result microbenchmark-result?])
+         (or/c interned-symbol? #f)]{
+ Returns the name of the @tech{microbenchmark} that @racket[result] is for.}
 
 @defproc[(microbenchmark-result-average-cpu-nanoseconds
           [result microbenchmark-result?])
