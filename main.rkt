@@ -37,15 +37,15 @@
          rebellion/base/symbol
          rebellion/collection/list
          rebellion/type/record
-         rebellion/type/reference)
+         rebellion/type/object)
 
 ;@------------------------------------------------------------------------------
 
 (define nonnegative-rational? (and/c rational? (>=/c 0)))
 
-(define-reference-type microexpression (thunk))
+(define-object-type microexpression (thunk))
 
-(define-reference-type microbenchmark
+(define-object-type microbenchmark
   (iterations microexpression-iterations microexpression-builder))
 
 (define-record-type microbenchmark-result
